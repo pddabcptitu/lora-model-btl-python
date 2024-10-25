@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=".\static\css\styles.css">
+    <link rel="stylesheet" href=".\static\css\reset.css">
+    <title>Sign Up</title>
+</head>
+<body class='background'>
+    <div class="container-form">
+        <form class="form-signup" method='POST'>
+            <h1 style='margin-left:8vw;'>Đăng kí</h1>
+            <input type="text" name="name" id="name" class="mail name" placeholder="User name" required>
+            <input type="text" name="mail" id='mail' class='mail' placeholder="Example@gmail.com" required>
+            <input type="password" name="password" id='password' class='password' placeholder="Password" required>
+            <button class="sigin" type="submit" style='margin-top: 3vh;'>Đăng kí</button>
+            <p class="signup">Bạn đã có tài khoản?</p>
+            <a href="/signin">Đăng nhập</a>
+        </form>
+    </div>
+    <script src="./static/js/signup.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=".\static\css\styles.css">
+    <link rel="stylesheet" href=".\static\css\reset.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>MoLora</title>
+</head>
+<body>
+    <!-- Header -->
+    <header class="head">
+        <div class="logo">
+            <a href="#!"><img src=".\static\img\ptit-logo-inkythuatso.jpg" alt="MoLora" class="image"></a>
+            <a href="" class="subtitle">MoLora</a>
+        </div>
+        <div class="feature">
+            <ul>
+                <li class="f1"><a href="#!">Model</a></li>
+                <li class="f2"><a href="/import">Import Model</a></li>
+                <li class="f3"><a href="#!">Document</a></li>
+            </ul>
+        </div>
+        {% if not user_name%}
+            <div class="action_log">
+                    <div class="login"><a href="/signin" >Đăng nhập</a></div>
+                    <div class="logup"><a href="/signup" >Đăng kí</a></div>
+            </div>
+        {%else%}
+            <div class="avt">{{user_name}}</div>
+            <div class="user_id" hidden>{{user_id}}</div>
+            
+        {%endif%}
+    </header>
+    <main class="main">
+        {% if user_name %}
+            <div class="bar">
+                <div class="bar-opt">
+                    <input type="checkbox" class="btn-bar" name="off" id="off" hidden>
+                    <label for="off"><img src=".\static\img\sidebar.png" alt="" class="sidebar"></label>
+                    <a href=""><img src=".\static\img\post.png" alt="" class="new_chat" style="position: absolute; left: 30vh;"></a>
+                    <input type="checkbox" name="" id="" class="btn-bar" hidden>
+                    <label for="off">
+                        <img src="./static/img/sidebar-on.png" alt="" class="sidebar sidebar-on">
+                    </label>
+                </div>
+
+                <div class="history">
+                    <p style="font-weight: bold; font-size: small;">Hôm nay</p>
+                    <ul>
+                        <li class="title_his">Model là gì</li>
+                        <li class="title_his">AI là gì</li>
+                    </ul>
+                </div>
+
+            </div>
+        {%endif%}
+        <div class="body">
+            
+            <div class="form-message" >
+                <h1 style="text-align: center; font-size: 2rem; margin-top: 35vh;     margin-left: --5vw; font-weight: bold;" >Tôi có thể giúp gì cho bạn ?</h1>
+                <!-- Nơi hiện thị input-output -->
+            </div>
+         
+
+            <form class="form-input" method='POST'>
+                <textarea name="input" id="input" class="input" placeholder="Nhập nội dung..."></textarea>
+                <button class="send" type="submit">
+                    <img src="./static/img/send.png" alt="Send" class="send">
+                </button>
+            </form>
+            
+        </div>
+    </main>
+    <script src="./static/js/index.js"></script>
+</body>
+
+</html>

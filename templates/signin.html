@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=".\static\css\styles.css">
+    <link rel="stylesheet" href=".\static\css\reset.css">
+    <title>Singin</title>
+</head>
+<body class='background'>
+    <div class="container-form">
+        <form action="/signin" class="form" method='POST'>
+            <h1>Đăng nhập</h1>
+            <input type="text" name="mail" id='mail' class='mail' placeholder="User name" required>
+            <input type="text" name="password" id='password' class='password' placeholder="Password" required>
+            <input type="checkbox" name="remember" id="remember" class="remember">
+            <label for="remember" style='text-align: center;'>Ghi nhớ đăng nhập</label>
+            <a class='forgot' href="/templates/signup.html">Quên mật khẩu?</a>
+            <button class="sigin" type="submit">Đăng nhập</button>
+            <p class="signup">Bạn chưa có tài khoản?</p>
+            <a href="/signup">Đăng kí</a>
+        </form>
+    </div>
+    
+</body>
+</html>
