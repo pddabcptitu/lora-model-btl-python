@@ -16,20 +16,21 @@ ul li{
 /* head  */
 .head {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     margin-top: 8px;
     /* margin-bottom: 8px; */
     padding-bottom: 8px;
     border-bottom: 1px solid #ccc;
-    border-radius: 999px;
+    border-radius: 5px;
 }
 
 
 .head .logo {
-    width: 120;
     display: flex;
-    justify-content: space-between;
+    width: 140px;
+    justify-content: space-evenly;
+    margin-left: 4vw;
     align-items: center;
 }
 
@@ -60,21 +61,101 @@ ul li{
     cursor: pointer;
 }
 
+.head .action_log .login{
+    padding: 10px;
+    cursor: pointer;
+}
+
 .head .action_log{
     display: flex;
     align-items: center;
     font-weight: bold;
     gap: 50px;
+    margin-right: 5vw;
 }
 
 .head .action_log .logup{
     padding: 10px;
     border: 1px solid #cccccc;
     border-radius: 999px;
-    background-color: #f0421262;
+    background: linear-gradient(to right bottom, #ff8f26, #ff5117);
+    transition: opacity .25s;
+    width: 7vw;
+    text-align: center;
 }
 
 .head .action_log .logup:hover{
+    cursor: pointer;
+}
+
+.head .avt{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    margin-right: 4vw;
+}
+
+.bx-user{
+    font-size: 30px;
+}
+
+.head .avt .arrow-down-ul{
+    display: none;
+    position: absolute;
+    text-align: center;
+    bottom: -65px;
+    left: -68px;
+    width: 140px;
+    height: 74px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #ccc;
+    overflow: hidden;
+}
+
+.head .avt .arrow-down-ul:hover{
+    cursor: pointer;
+}
+
+.head .avt .bx-caret-up{
+    position: absolute;
+    top: -15px;
+    right: 22px;
+    color: #f3f3f3;
+    font-size: 25px;
+}
+.avt ul li:not(:nth-child(1)){
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+    background-color: #fff;
+}
+
+/* .avt ul li:not(:nth-child(1)){
+    border-top: none;
+} */
+
+.avt ul li:last-child{
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    /* border-bottom: 1px solid #ccc; */
+}
+
+.avt ul li:nth-child(2){
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.avt ul li:hover{
+    background-color: #f7efef;
+}
+
+.head .avt .bx-user:hover{
+    cursor: pointer;
+}
+
+.head .avt .arrow-down:hover{
     cursor: pointer;
 }
 
@@ -88,7 +169,7 @@ ul li{
     display: inline-block;
     padding-top: 10px;
     padding-right: 10px;
-    padding-left: 10px;
+    padding-left: 7px;
     width: 35vh;
     height: 100vh;
     background-color: rgb(249 249 249);
@@ -121,27 +202,25 @@ ul li{
 
 .main .bar .sidebar-on{
     display: none;
-    margin-left: 227px;
-}
+    position: absolute;
+    left: calc(17vw + 5px);}
 
 .main .bar:has(:checked) .sidebar-on{
     display: block;
 }
 
-.form-input{
-    top: 92vh; 
-    left: 30%;
-    width: 150vh;
+.sidebar{
+    width: 25px;
 }
 
-
-.sidebar{
+.main .bar a:has(.new_chat){
+    display: inline-block;
     width: 25px;
 }
 
 .main .bar .new_chat{
     width: 25px;
-    margin-left: -10vh;
+    margin-left: calc(7vw - 4px);
 }
 
 .main .bar .history{
@@ -169,7 +248,7 @@ ul li{
 }
 
 .main .bar:has(:checked) ~ .body .form-message{
-    width: calc(78vw + 9px);
+    width: calc(78vw + 13px);
 }
 
 .main .body .form-message{
@@ -203,11 +282,14 @@ ul li{
     display: flex;
     width: 85vw;
     height: 50px;
-    margin-left: 45px;
     justify-content: center;
     align-items: center;
     background-color: #fff;
 
+}
+
+.main .body .form-input .send:hover{
+    cursor: pointer;
 }
 
 .main .body .form-input .input{
@@ -243,7 +325,6 @@ ul li{
     background-image: url('/static/img/avt-logup.png');
     background-color: #D9AFD9;
     opacity: 0.8;
-    background-image:  url('/static/img/avt-logup.png') linear-gradient(0deg, #D9AFD9 0%, #97D9E1 100%);
 }
 
 .background .container-form{

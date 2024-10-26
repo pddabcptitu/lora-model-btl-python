@@ -1,6 +1,6 @@
 var title_his;
-if(document.querySelector('.avt')){
-    var user = document.querySelector('.avt').innerHTML;
+if(document.querySelector('.user_name')){
+    var user = document.querySelector('.user_name').innerHTML;
     fetch('/api/gethistory',{
         method: 'GET'
     })
@@ -154,6 +154,7 @@ document.querySelector('.form-input').addEventListener('submit', async (event) =
         let pNew = document.createElement('pre');
         pNew.style.width = '95%';
         pNew.style.whiteSpace = 'pre-wrap';
+        pNew.style.color = 'black';
         pNew.innerHTML = message
         divNew.appendChild(pNew);
         divForm.appendChild(divNew);
@@ -223,3 +224,53 @@ function getConversationTitle(title_his){
         
 }
 
+// xử lý witdh form-input 
+let checkbox = document.querySelector('#off');
+if(checkbox){
+    checkbox.addEventListener('change', () => {
+        if(checkbox.checked){
+            document.querySelector('.form-input').style.width = '100vw';
+        }else{
+            document.querySelector('.form-input').style.width = '85vw';
+        }
+    });
+}
+else{
+    document.querySelector('.form-message').style.width = 'calc(83vw + 10px)';
+    document.querySelector('.form-input').style.width = '100vw';
+}
+
+
+// profile
+function arrowDown(event){
+    event.stopPropagation();
+    console.log('vaoc down');
+    let arrow = document.querySelector('.arrow-down-ul');
+    let hidden = window.getComputedStyle(arrow).display;
+    console.log(typeof hidden);
+    if(hidden == 'none'){
+        arrow.style.display = 'block';
+    }else{
+        arrow.style.display = 'none';
+    }
+}
+
+document.querySelector('.arrow-down-ul').onclick = (event) => {
+    event.stopPropagation();
+    console.log(event.target.classList[0]);
+    if(event.target.classList[0] == 'logout'){
+        console.log('vao logout');
+        fetch('/logout', {
+            method: 'GET',
+        }).then(response => response.json())
+        .then(data => {
+            url = data.url;
+            // window.location.href = url;
+            window.location.reload();
+        })
+    }
+}
+
+document.body.onclick = () => {
+    document.querySelector('.arrow-down-ul').style.display = 'none';
+};

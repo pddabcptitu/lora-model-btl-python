@@ -20,7 +20,7 @@ def botMessage():
     message = {
         'input': message
     }
-    url = 'https://cb9e-35-233-140-63.ngrok-free.app'
+    url = 'https://378b-35-204-149-131.ngrok-free.app/'
     response = requests.post(url, json=message)
     response = response.json()['response']
     print(response)
@@ -95,6 +95,15 @@ def signin():
     user_name = user[1]
     return redirect(url_for('home'))
 
+@app.route('/logout')
+def Logout():
+    global user_id, user_name
+    user_name = ''
+    user_id = ''
+    return jsonify({
+        'url': (url_for('signin'))
+    })
+
 @app.route('/api/conversation', methods=['POST'])
 def conversation():
     data = request.get_json()
@@ -145,7 +154,7 @@ def setConversation():
     print("SETCONVERSION: ",conv_id, receive, send)
     conn.commit()
     conn.close()
-    return jsonify({'response': 'success'}), 200
+    return jsonify({'response': 'success'}) , 200
 
 @app.route('/api/getconversation', methods=['POST'])
 def getConversation():
