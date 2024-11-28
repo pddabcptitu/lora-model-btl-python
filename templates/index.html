@@ -24,7 +24,7 @@
                 <li class="f3"><a href="#!">Document</a></li>
             </ul>
         </div> -->
-        {% if not user_name%}
+        {% if not user%}
             <div class="action_log">
                     <div class="login"><a href="/signin" >Đăng nhập</a></div>
                     <div class="logup"><a href="/signup" >Đăng kí</a></div>
@@ -34,16 +34,16 @@
                 <i onclick="arrowDown(event)" class='bx bx-user'></i> 
                 <ul class='arrow-down-ul'>
                     <li><i class='bx bx-caret-up'></i></li>
-                    <li class="user_name">{{user_name}}</li>
+                    <li class="user_name">{{user}}</li>
                     <li class="logout">Logout</li>
                 </ul>
                 <img onclick="arrowDown(event)" style='width: 10px;' src=".\static\img\arrow-down.png" class='arrow-down'> </div>
-            <div class="user_id" hidden>{{user_id}}</div>
+            <div class="user_id" hidden>{{id}}</div>
             
         {%endif%}
     </header>
     <main class="main">
-        {% if user_name %}
+        {% if user %}
             <div class="bar">
                 <div class="bar-opt">
                     <input type="checkbox" class="btn-bar" name="off" id="off" hidden>
@@ -58,7 +58,7 @@
                 <div class="history">
                     <p style="font-weight: bold; font-size: small;">Hôm nay</p>
                     <ul>
-                        <li class="title_his">Model là gì</li>
+                        <li class="title_his">Model là gì </li>
                         <li class="title_his">AI là gì</li>
                     </ul>
                 </div>

@@ -9,6 +9,7 @@ if(document.querySelector('.user_name')){
         let title_conv_id = data.data;
         console.log(title_conv_id);
         console.log(typeof title_conv_id);
+        console.log('vao js getHistory')
         for(let [conv_id, title] of title_conv_id){
             let ul = document.querySelector('.history ul');
             let li = document.createElement('li');
@@ -17,6 +18,10 @@ if(document.querySelector('.user_name')){
                 li.id = conv_id;
             }
             li.innerHTML = title;
+            let img = document.createElement('img');
+            img.src = "./static/img/bx-x.svg";
+            img.classList.add('erase');
+            li.appendChild(img);
             ul.insertBefore(li, ul.firstChild);
         }
     title_his = document.querySelectorAll('.title_his');
@@ -34,6 +39,12 @@ if(document.querySelector('.user_id')){
 
 
 var flag = true;
+
+let his_title = document.querySelector('.title_his');
+if(his_title){
+    var conv_id = his_title.id;
+    console.log('conv_id trong if his_title :', conv_id);
+}
 
 if(document.querySelector('.new_chat')){
     document.querySelector('.new_chat').addEventListener('click', (event) => {
@@ -56,19 +67,19 @@ document.querySelector('.form-input').addEventListener('submit', async (event) =
     divNew1.classList.add('user-message');
     let pNew = document.createElement('p');
     pNew.style.maxWidth = '70%';
+    pNew.style.lineHeight = '25px';
+    pNew.style.backgroundColor = '#f4f4f4';
+    pNew.style.borderRadius = '10px';
+    pNew.style.padding = '10px';
     pNew.innerHTML = textarea;
     divNew1.appendChild(pNew);
     let divForm = document.querySelector('.form-message');
     divForm.appendChild(divNew1);
     divForm.scrollTop = divForm.scrollHeight;
-    let his_title = document.querySelector('.title_his');
-    console.log('his_title', his_title);
-    if(his_title){
-        var conv_id = his_title.id;
-        console.log('conv_id trong if his_title :', conv_id);
-    }
+    
     if(flag){
         if(user){
+            
             console.log('user: ', user);
             let title = textarea.split(" ");
             let str = "";
@@ -96,6 +107,10 @@ document.querySelector('.form-input').addEventListener('submit', async (event) =
                     li.id = conv_id;
                 }
                 li.innerHTML = str;
+                let img = document.createElement('img');
+                img.src = "./static/img/bx-x.svg";
+                img.classList.add('erase');
+                li.appendChild(img);
                 ul.insertBefore(li, ul.firstChild);
                 title_his = document.querySelectorAll('.title_his');
                 getConversationTitle(title_his);
@@ -115,7 +130,6 @@ document.querySelector('.form-input').addEventListener('submit', async (event) =
     let i = 0;
     let interval = setInterval(() => {
         divNew.style.backgroundColor = color[i++ % 2];
-        divNew.style.opacity = 0.5;
         divNew.style.borderRadius = '5px';
         divNew.style.boxShadow = '1px 1px 2px rgba(DA, C9, F7, 0.4)'
     }, 500);
@@ -155,6 +169,7 @@ document.querySelector('.form-input').addEventListener('submit', async (event) =
         pNew.style.width = '95%';
         pNew.style.whiteSpace = 'pre-wrap';
         pNew.style.color = 'black';
+        pNew.style.lineHeight = '25px';
         pNew.innerHTML = message
         divNew.appendChild(pNew);
         divForm.appendChild(divNew);
@@ -178,11 +193,37 @@ document.getElementById('input').addEventListener('input', (evnet) => {
 // truy xuất đoạn chat khi nhấn vào his_title
 function getConversationTitle(title_his){
     console.log('title_his +++: ',title_his);
+    // xóa conversation 
+
+    let erase = document.querySelectorAll('.erase');
+    if(erase){
+        let conv_id;
+        for(let i of erase){
+            i.addEventListener('click', () => {
+                let parent = i.parentElement; 
+                conv_id = parent.id;
+                console.log(conv_id);
+                fetch('/api/deleteconversation',{
+                    method:'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        'conv_id':conv_id
+                    })
+                    
+                }).then(res => res.json())
+                .catch(error => {
+                    console.log(error);
+                })
+                parent.remove();
+            })
+        }
+        
+    }
     for(let i of title_his){
         i.addEventListener('click', (event) => {
             event.preventDefault();
-    
-            let conv_id = event.target.id;
+            flag = false;
+            conv_id = event.target.id;
             console.log('conv_id: target_id: ',conv_id);
             fetch('/api/getconversation', {
                 method:'POST',
@@ -202,6 +243,10 @@ function getConversationTitle(title_his){
                     divNew1.classList.add('user-message');
                     var pNew = document.createElement('p');
                     pNew.style.maxWidth = '70%';
+                    pNew.style.lineHeight = '25px';
+                    pNew.style.backgroundColor = '#f4f4f4';
+                    pNew.style.borderRadius = '10px';
+                    pNew.style.padding = '10px';
                     pNew.innerHTML = send;
                     divNew1.appendChild(pNew);
                     let divForm = document.querySelector('.form-message');
@@ -213,6 +258,7 @@ function getConversationTitle(title_his){
                     var pNew = document.createElement('pre');
                     pNew.style.width = '95%';
                     pNew.style.whiteSpace = 'pre-wrap';
+                    pNew.style.lineHeight = '25px';
                     pNew.innerHTML = receive;
                     divNew.appendChild(pNew);
                     divForm.appendChild(divNew);
@@ -220,8 +266,7 @@ function getConversationTitle(title_his){
                 }
             })
         })
-    }
-        
+    }   
 }
 
 // xử lý witdh form-input 

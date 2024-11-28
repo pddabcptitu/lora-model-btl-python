@@ -228,8 +228,26 @@ ul li{
 }
 
 .main .bar .title_his{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 5px;
     border-radius: 5px;
+    z-index: 1;
+}
+
+.main .bar .erase{
+    display: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    background-color: white;
+    opacity: 0.7;
+    z-index: 2;
+}
+
+.main .bar .title_his:hover > .erase{
+    display: block;
 }
 
 .main .bar .title_his:hover{

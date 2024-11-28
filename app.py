@@ -5,31 +5,29 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = 'your_secret_key' 
 
-user_name = ''
-user_id = ''
-
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('index.html', user_name=user_name, user_id=user_id)
+    if 'user' in session:
+        return render_template('index.html', user=session['user']['user'], id = session['user']['id'])
+    return render_template('index.html', user = '', id = '')
 
 @app.route('/api/response', methods=['POST'])
 def botMessage():
-    data = request.get_json() 
+    data = request.get_json()  
     message = data['input']
+    
+    # =====lấy response từ jupyter notebook====
     message = {
         'input': message
     }
-<<<<<<< HEAD
-    url = 'https://378b-35-204-149-131.ngrok-free.app/'
-=======
-    url = 'https://cb9e-35-233-140-63.ngrok-free.app'#api ngrok để gọi model từ Jupyter Notebook
-    
->>>>>>> 0a62ff42c663ee212a831e0eda8fd14c47faf808
+    url = 'https://629b-34-30-205-241.ngrok-free.app'
     response = requests.post(url, json=message)
+    # print(response.text)
     response = response.json()['response']
+    #lấy res trực tiếp trong máy
+    # response = model_lora.response(message)
     print(response)
-    # response = 'dcmmm'
     return jsonify({'message': response}), 200 
 
 @app.route('/signup', methods=['GET'])
@@ -38,12 +36,12 @@ def page_signup():
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
-    global user_name
     data = request.get_json()
     name = data['user']
     mail = data['mail']
     password = data['password']
     print('name', name)
+    print('mail', mail)
     urldb = 'user.db'
     # ket noi db
     conn = sqlite3.connect(urldb)
@@ -51,11 +49,9 @@ def signup():
     cursor = conn.cursor()
     cursor.execute('select email from user where email = ?', (mail,))
     mails = cursor.fetchall()
+    print('mails: ', mails)
     
     if mail and password and name and mail not in [mail[0] for mail in mails]:
-
-        # session['user'] = mail
-        
         print('Vao if dc ')
         cursor.execute("""
                        insert into user (name, email, password) values(?, ?, ? );
@@ -64,7 +60,11 @@ def signup():
                        select id from user where email = ?
                        """, (mail, ))
         user_id = cursor.fetchone()
-        user_name = name
+        session.clear()
+        session['user'] = {
+            'user': name,
+            'id': user_id
+        }
         conn.commit()
         conn.close()
 
@@ -77,11 +77,12 @@ def signup():
 
 @app.route('/signin', methods=['GET'])
 def page_signin():
+    if 'user' in session:
+        return redirect(url_for('home'))
     return render_template('signin.html')
 
 @app.route('/signin', methods=['POST'])
 def signin():
-    global user_id, user_name
     mail = request.form['mail']
     password = request.form['password']
     print(mail, password)
@@ -92,19 +93,21 @@ def signin():
     cursor.execute('SELECT id, name, email, password FROM user WHERE email = ?', (mail,))
     user = cursor.fetchone()
     conn.close()
-    print(user)
+    print("info: ", user)
 
     if user is None or user[3] != password:  
         return 'Thông tin đăng nhập không chính xác!', 400
-    user_id = user[0]
-    user_name = user[1]
+    session.clear()
+    session['user'] = {
+        'user':user[1],
+        'id':user[0]
+    }
+
     return redirect(url_for('home'))
 
 @app.route('/logout')
 def Logout():
-    global user_id, user_name
-    user_name = ''
-    user_id = ''
+    session.clear()
     return jsonify({
         'url': (url_for('signin'))
     })
@@ -114,12 +117,10 @@ def conversation():
     data = request.get_json()
     user_id = data['user_id']
     title = data['title']
-    print('==========================================================',user_id, title)
     urldb = 'user.db'
     conn = sqlite3.connect(urldb)
     cursor = conn.cursor()
     try:
-        print("dcmmmmm")
         cursor.execute('INSERT INTO conversation (user_id, title) VALUES (?, ?)', (user_id, title))
         conn.commit()
     except:
@@ -135,13 +136,16 @@ def conversation():
 
 @app.route('/api/gethistory', methods=['GET'])
 def getHistory():
-    global user_id, user_name
+    if 'user' in session:
+        user_id = session['user']['id']
+    else:
+        user_id = None
     urldb = 'user.db'
     conn = sqlite3.connect(urldb) 
     cursor = conn.cursor()
     cursor.execute('select conv_id, title from conversation where user_id = ?', (user_id,))
     data = cursor.fetchall()
-    
+    print('getHistory', data)
     return jsonify({
         'data': data
     }), 200
@@ -156,7 +160,6 @@ def setConversation():
     conn = sqlite3.connect(urldb)
     cursor = conn.cursor()
     cursor.execute('insert into message (conv_id, receive, send) values(?, ?, ?)', (conv_id, receive, send))
-    print("SETCONVERSION: ",conv_id, receive, send)
     conn.commit()
     conn.close()
     return jsonify({'response': 'success'}) , 200
@@ -173,10 +176,37 @@ def getConversation():
                    where conversation.conv_id = ? and conversation.user_id = user.id and message.conv_id = conversation.conv_id;
                    ''', (conv_id, ))   
     messages = cursor.fetchall()
-    print(*messages)
     return jsonify({
         'messages':messages
     })
+
+@app.route('/api/deleteconversation', methods=['POST'])
+def deleteConversation():
+    data = request.get_json()
+    print('data', data)
+    id_conv = data['conv_id']
+    
+    urldb = 'user.db'
+    conn = sqlite3.connect(urldb)
+    cursor = conn.cursor()
+    cursor.execute(
+        '''
+        delete from conversation
+        where conv_id = ?
+        ''',(id_conv,)
+    )
+    
+    cursor.execute(
+        '''
+        delete from message 
+        where conv_id = ?
+        ''',(id_conv,)
+    )
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'response': 'success'}) , 200
 
 if __name__ == '__main__':
     app.run(debug=True)
