@@ -21,7 +21,7 @@ def botMessage():
     message = {
         'input': message
     }
-    url = 'https://66be-34-105-12-32.ngrok-free.app'#api ngrok để gọi model từ Jupyter Notebook
+    url = 'https://a025-34-80-247-8.ngrok-free.app'#api ngrok để gọi model từ Jupyter Notebook
     response = requests.post(url, json=message)
     # print(response.text)
     response = response.json()['response']
